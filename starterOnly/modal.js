@@ -283,7 +283,8 @@ function validateTerms() {
 }
 
 // Validation complète du formulaire
-function validate() {
+function validate(event) {
+  event.preventDefault();
 
   // Exécution de toutes les validations
   const isFirstNameValid = validateFirstName();
@@ -309,10 +310,16 @@ function validate() {
   }
   
   // Si tout est valide, on peut soumettre le formulaire
-  alert('Formulaire validé avec succès !!!');
-  closeModal();
-  return;
-}
+  const modalBody = document.querySelector('form');
+  modalBody.style.display = 'none';
+  
+  // Afficher le message de confirmation
+  const formConfirmer = document.querySelector('.form-confirmer');
+  formConfirmer.style.display = 'flex';
+} 
+
+document.getElementById('fermer-form').addEventListener('click', closeModal);
+  
 
 //Validation en temps réel (optionnelle mais recommandée)
 document.getElementById('submit-btn').addEventListener('click', validate);

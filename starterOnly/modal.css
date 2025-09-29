@@ -128,6 +128,43 @@ main {
   cursor: pointer;
 }
 
+.form-confirmer {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between; /* Espace entre les éléments */
+  align-items: center; /* Centre horizontalement */
+  color: #ffffff;
+  padding: 40px 5px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  width: 536px;
+  height: 560.61px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.form-confirmer h2 {
+  justify-content: center;
+  padding-bottom: 80px;
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.form-confirmer button {
+  background-color: #ff1744;
+  justify-content: end;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .modal-btn:hover {
   background: #3876ac;
 }
@@ -139,6 +176,13 @@ main {
 }
 
 /* Modal form */
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
 
 .button {
   background: #fe142f;
@@ -333,6 +377,10 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+  appearance: auto;
+  text-align: center;
+  cursor: default;
+  padding-inline: 6px;
 }
 /* custom select styles */
 .custom-select {
@@ -406,7 +454,7 @@ input[data-error]::after {
   font-size: 16px;
 }
 .hero-section {
-  min-height: 93vh;
+  /**** min-height: 93vh; *****/
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -527,4 +575,3 @@ footer {
     opacity: 1;
   }
 }
-

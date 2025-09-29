@@ -56,7 +56,7 @@ function closeModal() {
   modalbg.style.display = "none";
 }
 
-// BONUS : Fermer la modal en cliquant sur l'arrière-plan
+//Fermer la modal en cliquant sur l'arrière-plan
 modalbg.addEventListener("click", function(event) {
   // Vérifie si le clic est directement sur l'arrière-plan (pas sur le contenu de la modal)
   if (event.target === modalbg) {
@@ -72,4 +72,261 @@ document.addEventListener("keydown", function(event) {
   }
 });
 
+// Validation du prenom
+function validateFirstName() {
+  const firstInput = document.getElementById('first');
+  const firstError = document.getElementById('first-error');
+  const value = firstInput.value.trim();
+  
+  // Vérification: vide ou moins de 2 caractères
+  if (value === '' || value.length < 2) {
+    firstInput.classList.add('error');
+    firstInput.classList.remove('valid');
+    firstError.style.display = 'block';
+    firstError.textContent = 'Veuillez entrer 2 caractères ou plus pour le champ du nom.';
+    return false;
+  }
+  
+  // Validation réussie
+  firstInput.classList.add('valid');
+  firstInput.classList.remove('error');
+  firstError.style.display = 'none';
+  return true;
+  }
 
+// Validation du nom
+function validateLastName() {
+  const lastInput = document.getElementById('last');
+  const lastError = document.getElementById('last-error');
+  const value = lastInput.value.trim();
+  
+  // Vérification: vide ou moins de 2 caractères
+  if (value === '' || value.length < 2) {
+    lastInput.classList.add('error');
+    lastInput.classList.remove('valid');
+    lastError.style.display = 'block';
+    lastError.textContent = 'Le nom doit contenir au moins 2 caractères';
+    return false;
+  }
+  
+  // Validation réussie
+  lastInput.classList.add('valid');
+  lastInput.classList.remove('error');
+  lastError.style.display = 'none';
+  return true;
+}
+
+// Validation de l'email (format valide)
+function validateEmail() {
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('email-error');
+  const value = emailInput.value.trim();
+  
+  // Regex pour valider le format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  // Vérification: vide
+  if (value === '') {
+    emailInput.classList.add('error');
+    emailInput.classList.remove('valid');
+    emailError.style.display = 'block';
+    emailError.textContent = 'L\'email est obligatoire';
+    return false;
+  }
+  
+  // Vérification: format invalide
+  if (!emailRegex.test(value)) {
+    emailInput.classList.add('error');
+    emailInput.classList.remove('valid');
+    emailError.style.display = 'block';
+    emailError.textContent = 'Format d\'email invalide';
+    return false;
+  }
+  
+  // Validation réussie
+  emailInput.classList.add('valid');
+  emailInput.classList.remove('error');
+  emailError.style.display = 'none';
+  return true;
+}
+
+function validateBirthdate() {
+  const birthdateInput = document.getElementById('birthdate');
+  const birthdateError = document.getElementById('birthdate-error');
+  const value = birthdateInput.value;
+
+  if (!value) {
+    birthdateInput.classList.add('error');
+    birthdateInput.classList.remove('valid');
+    birthdateError.style.display = 'block';
+    birthdateError.textContent = 'La date de naissance est obligatoire';
+    return false;
+  }
+
+  const today = new Date();
+  const birthDate = new Date(value);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  if (age < 18) {
+    birthdateInput.classList.add('error');
+    birthdateInput.classList.remove('valid');
+    birthdateError.style.display = 'block';
+    birthdateError.textContent = 'Vous devez avoir au moins 18 ans';
+    return false;
+  }
+
+  // Validation réussie
+  birthdateInput.classList.add('valid');
+  birthdateInput.classList.remove('error');
+  birthdateError.style.display = 'none';
+  return true;
+}
+
+// Validation du nombre de tournois (valeur numérique, 0-99)
+function validateQuantity() {
+  const quantityInput = document.getElementById('quantity');
+  const quantityError = document.getElementById('quantity-error');
+  const value = quantityInput.value.trim();
+  
+  // Vérification: vide
+  if (value === '') {
+    quantityInput.classList.add('error');
+    quantityInput.classList.remove('valid');
+    quantityError.style.display = 'block';
+    quantityError.textContent = 'Le nombre de tournois est obligatoire';
+    return false;
+  }
+    
+  // Vérification: pas un nombre valide
+  if (isNaN(value) || isNaN(parseFloat(value))) {
+    quantityInput.classList.add('error');
+    quantityInput.classList.remove('valid');
+    quantityError.style.display = 'block';
+    quantityError.textContent = 'Veuillez saisir un nombre valide';
+    return false;
+  }
+    
+  const number = parseInt(value);
+    
+  // Vérification: nombre négatif
+  if (number < 0) {
+    quantityInput.classList.add('error');
+    quantityInput.classList.remove('valid');
+    quantityError.style.display = 'block';
+    quantityError.textContent = 'Le nombre ne peut pas être négatif';
+    return false;
+  }
+    
+  // Vérification: nombre trop grand (> 99)
+  if (number > 99) {
+    quantityInput.classList.add('error');
+    quantityInput.classList.remove('valid');
+    quantityError.style.display = 'block';
+    quantityError.textContent = 'Maximum 99 tournois autorisés';
+    return false;
+  }
+    
+    // Validation réussie
+    quantityInput.classList.add('valid');
+    quantityInput.classList.remove('error');
+    quantityError.style.display = 'none';
+    return true;
+}
+
+// Validation des boutons radio (au moins un sélectionné)
+function validateLocation() {
+  const locationError = document.getElementById('location-error');
+  const radioButtons = document.querySelectorAll('input[name="location"]');
+  
+  // Vérification qu'au moins un bouton radio est coché
+  let isSelected = false;
+  for (let radio of radioButtons) {
+    if (radio.checked) {
+      isSelected = true;
+      break;
+    }
+  }
+    
+  // Affichage de l'erreur si aucun bouton n'est sélectionné
+  if (!isSelected) {
+    locationError.style.display = 'block';
+    locationError.textContent = 'Veuillez sélectionner un tournoi';
+    return false;
+  }
+    
+  // Validation réussie
+  locationError.style.display = 'none';
+  return true;
+}
+
+// Validation de la case conditions générales (obligatoire)
+function validateTerms() {
+  const checkbox1 = document.getElementById('checkbox1');
+  const checkboxError = document.getElementById('checkbox-error');
+  
+  // Vérification que la case conditions générales est cochée
+  if (!checkbox1.checked) {
+    checkboxError.style.display = 'block';
+    checkboxError.textContent = 'Vous devez accepter les conditions d\'utilisation';
+    return false;
+  }
+  
+  // Validation réussie
+  checkboxError.style.display = 'none';
+  return true;
+  
+}
+
+// Validation complète du formulaire
+function validate() {
+
+  // Exécution de toutes les validations
+  const isFirstNameValid = validateFirstName();
+  const isLastNameValid = validateLastName();
+  const isEmailValid = validateEmail();
+  const isBirthdateValid = validateBirthdate();
+  const isQuantityValid = validateQuantity();
+  const isLocationValid = validateLocation();
+  const isTermsValid = validateTerms();
+  
+  // Vérification que toutes les validations sont passées
+  const isFormValid = isFirstNameValid && 
+                      isLastNameValid && 
+                      isEmailValid && 
+                      isBirthdateValid &&
+                      isQuantityValid && 
+                      isLocationValid && 
+                      isTermsValid;
+  
+  // Si le formulaire n'est pas valide, on empêche la soumission
+  if (!isFormValid) {
+    return false; // Empêche la soumission du formulaire
+  }
+  
+  // Si tout est valide, on peut soumettre le formulaire
+  alert('Formulaire validé avec succès !!!');
+  closeModal();
+  return;
+}
+
+//Validation en temps réel (optionnelle mais recommandée)
+document.getElementById('submit-btn').addEventListener('click', validate);
+document.getElementById('first').addEventListener('input', validateFirstName);
+document.getElementById('last').addEventListener('input', validateLastName);
+document.getElementById('email').addEventListener('input', validateEmail);
+document.getElementById("birthdate").addEventListener("change", validateBirthdate);
+document.getElementById('quantity').addEventListener('input', validateQuantity);
+
+// Validation en temps réel des boutons radio
+const radioButtons = document.querySelectorAll('input[name="location"]');
+radioButtons.forEach(radio => {
+  radio.addEventListener('change', validateLocation);
+});
+
+// Validation en temps réel de la checkbox conditions
+document.getElementById('checkbox1').addEventListener('change', validateTerms);

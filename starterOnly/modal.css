@@ -520,24 +520,64 @@ footer {
     background-color: #fff;
   }
 
+
+  /* Changement utiliser du js avec une var qui prendra l etat de la barre et faire 2 barre en css*/
   /* Navigation mobile */
+
   .topnav {
-    display: flex;
-    justify-content: space-between; /* tout centré horizontalement */
-    align-items: center;
-    width: 93%;
-    position: fixed;
-    margin: 10px 15px;
-    padding: 0;
-    flex-direction: row;
-    height: 40px;
+    margin: 0%;
   }
 
-  main {        /* supprime marges par défaut */
+  .header-logo {
+    display: flex;
+    justify-content: space-between; /* tout centré horizontalement */
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    padding: 10px 15px 10px 35px;
+    margin: 0;
+    flex-direction: row;
+    height: 60px;
+    z-index: 9999; /* ← NOUVEAU : Toujours au-dessus */ 
+    background: white; /* ← NOUVEAU : Fond blanc */ 
+  }
+
+  .topnav.responsive .icon i { 
+    background: #fe142f; 
+    color: white; 
+  }
+
+  .icon {
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon i { 
+    color: red;
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    background-color: white;
+  }
+
+  .topnav.responsive .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 10px;
+  }
+
+  main {        
     padding-top: 60px;        /* même valeur que .topnav height */
 }
 
-  .bground {          /* supprime marges par défaut */
+  .bground {          
     padding-top: 60px;        /* même valeur que .topnav height */
 }
   
@@ -550,21 +590,6 @@ footer {
 
   .footer {
     padding-bottom: 20000px;
-  }
-
-  .header-logo {
-    width: 40%;
-    padding-left: 20px;
-  }
-
-  .icon {
-    margin-top: 0px;
-  }
-
-  .icon i {
-    color: red;
-    height: 20px;
-    width: 20px;
   }
 
   .header-logo img {
@@ -642,10 +667,7 @@ footer {
 /** modal responsive pour téléphone **/
 
 @media screen and (max-width: 800px) {
-  .bground {
-    background-color: rgba(26, 39, 156, 0.9);
-  }
-
+  
   .content {
     margin: 0;
     max-width: 100%;

@@ -8,12 +8,28 @@ function editNav() {
     // Si oui, ajoute la classe "responsive" à la classe existante
     // Résultat : "topnav responsive"
     x.className += " responsive";
+    // Empêche le scroll du body quand le menu est ouvert
+    document.body.style.overflow = 'hidden'
   } else {
     // Sinon, remet la classe à "topnav" uniquement
     // Cela retire la classe "responsive" si elle était présente
     x.className = "topnav";
+    // Réactive le scroll du body
+    document.body.style.overflow = '';
   }
 }
+
+document.addEventListener('click', function(event) {
+  var nav = document.getElementById("myTopnav");
+  var mainNavbar = nav.querySelector('.main-navbar');
+  var icon = nav.querySelector('.icon');
+  
+  if (nav.className.includes("responsive") && 
+      !mainNavbar.contains(event.target) && 
+      !icon.contains(event.target)) {
+    editNav();
+  }
+});
 
 // =====================================
 // GESTION DE MODAL

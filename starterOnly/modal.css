@@ -42,6 +42,11 @@ img {
 .main-navbar {
     float: right;
 }
+
+.close-btn {
+  display: none; /* Cache complètement le bouton sur desktop */
+}
+
 .topnav a {
   float: left;
   display: block;
@@ -520,12 +525,70 @@ footer {
     background-color: #fff;
   }
 
+  .main-navbar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease-in-out;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    color: #333;
+    text-decoration: none;
+    display: block !important;
+  }
+
+  .topnav.responsive .main-navbar {
+    right: 0;
+  }
+
+  .topnav::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 999;
+  }
+
+  .topnav.responsive::before {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .main-navbar a:not(.close-btn) {
+    display: block !important; /* Force l'affichage des liens */
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    float: none; /* Annule le float du desktop */
+    text-align: left; /* Alignement à gauche */
+  }
+
 
   /* Changement utiliser du js avec une var qui prendra l etat de la barre et faire 2 barre en css*/
   /* Navigation mobile */
 
   .topnav {
     margin: 0%;
+    height: 60px !important;
   }
 
   .header-logo {
@@ -538,9 +601,15 @@ footer {
     padding: 10px 15px 10px 35px;
     margin: 0;
     flex-direction: row;
-    height: 60px;
-    z-index: 9999; /* ← NOUVEAU : Toujours au-dessus */ 
+    height: 7 0px;
+    z-index: 10001; /* ← NOUVEAU : Toujours au-dessus */ 
     background: white; /* ← NOUVEAU : Fond blanc */ 
+    left: 0; /* Force la position */
+    top: 0; /* Force la position */
+  }
+
+  .topnav.responsive {
+    height: 60px;
   }
 
   .topnav.responsive .icon i { 
@@ -574,11 +643,11 @@ footer {
   }
 
   main {        
-    padding-top: 60px;        /* même valeur que .topnav height */
+    padding-top: 20px;        /* même valeur que .topnav height */
 }
 
   .bground {          
-    padding-top: 60px;        /* même valeur que .topnav height */
+    padding-top: 70px;        /* même valeur que .topnav height */
 }
   
   .topnav a {display: none;}

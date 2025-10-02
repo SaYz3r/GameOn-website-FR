@@ -16,7 +16,7 @@ function editNav() {
 }
 
 // =====================================
-// GESTION DE MODAL (fenêtre popup)
+// GESTION DE MODAL
 // =====================================
 
 // SÉLECTION DES ÉLÉMENTS DOM
@@ -27,11 +27,11 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 // Sélectionne TOUS les éléments avec la classe "modal-btn" (boutons pour ouvrir la modal)
 
 const formData = document.querySelectorAll(".formData");
-// Sélectionne TOUS les éléments avec la classe "formData" (champs de formulaire)
-// Note : Cette variable n'est pas utilisée dans le code fourni
 
-// AJOUT D'ÉVÉNEMENTS
-// Parcourt chaque bouton modal et lui ajoute un écouteur d'événement
+// Variable pour savoir si le formulaire a été validé
+let formWasValidated = false;
+
+// Ouvrir la modal
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // Quand on clique sur n'importe quel bouton .modal-btn, la fonction launchModal() se déclenche
 
@@ -39,40 +39,91 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 function launchModal() {
   // Change le style CSS pour rendre la modal visible
   modalbg.style.display = "block";
-  // Passe l'affichage de "none" (caché) à "block" (visible)
+  // S'assurer que le formulaire est visible et la confirmation cachée
+  document.querySelector('form').style.display = 'flex';
+  document.querySelector('.form-confirmer').style.display = 'none';
 }
 
+// Fermer la modal (bouton X du formulaire)
+const closeBtn = document.querySelector("form .close");
+closeBtn.addEventListener("click", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  closeModalFromForm();
+});
 
-// FERMETURE DE LA MODAL
-// Sélectionne l'élément span avec la classe "close"
-const closeBtn = document.querySelector(".close");
-
-// Ajoute un écouteur d'événement au clic sur le bouton de fermeture
-closeBtn.addEventListener("click", closeModal);
-
-// Fonction pour fermer la modal
-function closeModal() {
-  // Cache la modal en remettant display à "none"
+// Fonction pour fermer depuis le formulaire (sans vider)
+function closeModalFromForm() {
   modalbg.style.display = "none";
 }
 
-//Fermer la modal en cliquant sur l'arrière-plan
+// Fonction pour fermer depuis la confirmation (avec vidage)
+function closeModal() {
+  // Cache la modal en remettant display à "none"
+  modalbg.style.display = "none";
+  
+  // Réinitialiser le formulaire UNIQUEMENT s'il a été validé
+  if (formWasValidated) {
+    resetForm();
+    formWasValidated = false; // Réinitialiser le flag
+  }
+  
+  // Toujours remettre l'affichage du formulaire pour la prochaine ouverture
+  document.querySelector('form').style.display = 'flex';
+  document.querySelector('.form-confirmer').style.display = 'none';
+}
+
+// Fonction pour réinitialiser complètement le formulaire
+function resetForm() {
+  const form = document.querySelector('form');
+  
+  // Vider tous les champs
+  form.reset();
+  
+  // Retirer toutes les classes d'erreur et de validation
+  const inputs = form.querySelectorAll('input.text-control');
+  inputs.forEach(input => {
+    input.classList.remove('error', 'valid');
+  });
+  
+  // Cacher tous les messages d'erreur
+  const errorMessages = document.querySelectorAll('.error-message');
+  errorMessages.forEach(error => {
+    error.style.display = 'none';
+  });
+}
+
+// Fermer en cliquant sur l'arrière-plan
 modalbg.addEventListener("click", function(event) {
-  // Vérifie si le clic est directement sur l'arrière-plan (pas sur le contenu de la modal)
   if (event.target === modalbg) {
-    closeModal();
+    // Si on est sur la page de confirmation, vider le formulaire
+    if (formWasValidated) {
+      closeModal();
+    } else {
+      // Sinon, juste fermer sans vider
+      closeModalFromForm();
+    }
   }
 });
 
-// BONUS : Fermer la modal avec la touche Échap
+// Fermer avec la touche Échap
 document.addEventListener("keydown", function(event) {
   // Vérifie si la touche pressée est "Escape" et si la modal est visible
   if (event.key === "Escape" && modalbg.style.display === "block") {
-    closeModal();
+    // Si on est sur la page de confirmation, vider le formulaire
+    if (formWasValidated) {
+      closeModal();
+    } else {
+      // Sinon, juste fermer sans vider
+      closeModalFromForm();
+    }
   }
 });
 
-// Validation du prenom
+// =====================================
+// FONCTIONS DE VALIDATION
+// =====================================
+
 function validateFirstName() {
   const firstInput = document.getElementById('first');
   const firstError = document.getElementById('first-error');
@@ -92,7 +143,7 @@ function validateFirstName() {
   firstInput.classList.remove('error');
   firstError.style.display = 'none';
   return true;
-  }
+}
 
 // Validation du nom
 function validateLastName() {
@@ -120,8 +171,7 @@ function validateLastName() {
 function validateEmail() {
   const emailInput = document.getElementById('email');
   const emailError = document.getElementById('email-error');
-  const value = emailInput.value.trim();
-  
+  const value = emailInput.value.trim();  
   // Regex pour valider le format email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
@@ -231,11 +281,10 @@ function validateQuantity() {
     return false;
   }
     
-    // Validation réussie
-    quantityInput.classList.add('valid');
-    quantityInput.classList.remove('error');
-    quantityError.style.display = 'none';
-    return true;
+  quantityInput.classList.add('valid');
+  quantityInput.classList.remove('error');
+  quantityError.style.display = 'none';
+  return true;
 }
 
 // Validation des boutons radio (au moins un sélectionné)
@@ -279,10 +328,9 @@ function validateTerms() {
   // Validation réussie
   checkboxError.style.display = 'none';
   return true;
-  
 }
 
-// Validation complète du formulaire
+// validation du formulaire
 function validate(event) {
   event.preventDefault();
 
@@ -306,27 +354,33 @@ function validate(event) {
   
   // Si le formulaire n'est pas valide, on empêche la soumission
   if (!isFormValid) {
-    return false; // Empêche la soumission du formulaire
+    return false;
   }
   
-  // Si tout est valide, on peut soumettre le formulaire
-  const modalBody = document.querySelector('form');
-  modalBody.style.display = 'none';
+  // Marquer que le formulaire a été validé avec succès
+  formWasValidated = true;
   
-  // Afficher le message de confirmation
-  const formConfirmer = document.querySelector('.form-confirmer');
-  formConfirmer.style.display = 'flex';
-} 
+  // Cacher le formulaire et afficher la confirmation
+  document.querySelector('form').style.display = 'none';
+  document.querySelector('.form-confirmer').style.display = 'flex';
+}
 
+// GESTION DE LA PAGE DE CONFIRMATION
+// Bouton "Fermer" de la confirmation
 document.getElementById('fermer-form').addEventListener('click', closeModal);
-  
 
-//Validation en temps réel (optionnelle mais recommandée)
+// Croix de fermeture de la confirmation
+const closeConfirmer = document.getElementById('close-confirmer');
+if (closeConfirmer) {
+  closeConfirmer.addEventListener('click', closeModal);
+}
+
+// VALIDATION EN TEMPS RÉEL
 document.getElementById('submit-btn').addEventListener('click', validate);
 document.getElementById('first').addEventListener('input', validateFirstName);
 document.getElementById('last').addEventListener('input', validateLastName);
 document.getElementById('email').addEventListener('input', validateEmail);
-document.getElementById("birthdate").addEventListener("change", validateBirthdate);
+document.getElementById('birthdate').addEventListener('change', validateBirthdate);
 document.getElementById('quantity').addEventListener('input', validateQuantity);
 
 // Validation en temps réel des boutons radio
